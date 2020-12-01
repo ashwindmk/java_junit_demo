@@ -1,0 +1,12 @@
+# Mac
+**/.DS_Store
+
+# IDE
+.idea
+/*.iml
+
+# Project
+target
+.settings
+.project
+.classpath
