@@ -1,11 +1,8 @@
 package com.ashwin;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
+import org.junit.*;
+import org.junit.function.ThrowingRunnable;
 import java.security.InvalidParameterException;
-
 import static org.junit.Assert.assertEquals;
 
 public class MainTest {
@@ -63,5 +60,21 @@ public class MainTest {
 
         Main main = new Main();
         main.withdraw(req, bal);
+    }
+
+    @Test
+    public void testInsufficientBalanceExceptionMessage() {
+        System.out.println("MainTest | testInsufficientBalanceExceptionMessage");
+        int req = 25;
+        int bal = 20;
+
+        InsufficientBalanceException e = Assert.assertThrows(InsufficientBalanceException.class, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                Main main = new Main();
+                main.withdraw(req, bal);
+            }
+        });
+        assertEquals("testInsufficientBalanceExceptionMessage", "Trying to withdraw " + req + " from " + bal, e.getMessage());
     }
 }
