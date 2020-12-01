@@ -17,4 +17,13 @@ public class Main {
         }
         return balance - required;
     }
+
+    public int process(int time) {
+        try {
+            Thread.sleep(time * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

@@ -2,10 +2,19 @@ package com.ashwin;
 
 import org.junit.*;
 import org.junit.function.ThrowingRunnable;
+import org.junit.rules.ErrorCollector;
+import org.junit.rules.Timeout;
+
 import java.security.InvalidParameterException;
 import static org.junit.Assert.assertEquals;
 
 public class MainTest {
+    @Rule
+    public final Timeout timeout = Timeout.seconds(2);
+
+    @Rule
+    public final ErrorCollector errorCollector = new ErrorCollector();
+
     @BeforeClass
     public static void beforeClass() {
         // Executes once before everything else
@@ -76,5 +85,42 @@ public class MainTest {
             }
         });
         assertEquals("testInsufficientBalanceExceptionMessage", "Trying to withdraw " + req + " from " + bal, e.getMessage());
+    }
+
+    @Test
+    public void testProcessTimeout() {
+        System.out.println("MainTest | testProcessTimeout");
+        Main main = new Main();
+        int res = main.process(4);
+        Assert.assertEquals("testTimeoutProcess", 0, res);
+    }
+
+    @Test
+    public void testErrorCollectors() {
+        System.out.println("MainTest | testErrorCollectors");
+        Main main = new Main();
+
+        try {
+            main.withdraw(-5, 10);
+        } catch (Exception e) {
+            // This will fail the test, but continues
+            errorCollector.addError(e);
+        }
+
+        try {
+            main.withdraw(12, 10);
+        } catch (Exception e) {
+            // This will fail the test, but continues
+            errorCollector.addError(e);
+        }
+    }
+
+    @After
+    public void after() {
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        System.out.println("MainTest | afterClass");
     }
 }
